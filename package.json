@@ -1,0 +1,31 @@
+{
+  "name": "@baethon/polaris-form-hook",
+  "version": "1.0.0",
+  "description": "Simple form hook for @shopify/polaris",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "polaris",
+    "hook",
+    "react"
+  ],
+  "author": "Radoslaw Mejer <radmen@baethon.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "@types/react": "^18.2.14",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.14",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "^2.8.8",
+    "react": "^18.2.0"
+  },
+  "lint-staged": {
+    "*.ts": "npx prettier --write"
+  }
+}
