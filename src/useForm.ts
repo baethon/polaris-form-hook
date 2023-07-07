@@ -1,24 +1,10 @@
 import { useState, useCallback } from "react";
 
-export type FormHook<T, K extends keyof T> = {
-  data: T;
+export default function <T, K extends keyof T>(props: T) {
+  const [data, setData] = useState(props);
 
-  setField: (name: K, value: T[K]) => void;
-
-  register: (name: K) => {
-    onChange(value: T[K]): void;
-    value: T[K];
-  };
-
-  update: (values: Partial<T>) => void;
-};
-
-export default function <T>(props: T): FormHook<T, keyof T> {
-  type LocalHook = FormHook<T, keyof T>;
-  const [data, setData] = useState<T>(props);
-
-  const setField = useCallback<LocalHook["setField"]>(
-    (name, value) => {
+  const setField = useCallback(
+    (name: K, value: T[K]) => {
       setData((state) => ({
         ...state,
         [name]: value,
@@ -27,16 +13,15 @@ export default function <T>(props: T): FormHook<T, keyof T> {
     [data]
   );
 
-  const register: LocalHook["register"] = (name) => ({
+  const register = (name: K) => ({
     value: data[name],
-    onChange: useCallback(
-      (value) => setData({ ...data, [name]: value }),
-      [data]
-    ),
+    onChange(value: T[K]) {
+      setData({ ...data, [name]: value });
+    },
   });
 
-  const update = useCallback<LocalHook["update"]>(
-    (values) =>
+  const update = useCallback(
+    (values: Partial<T>) =>
       setData((state) => ({
         ...state,
         ...values,
