@@ -4,10 +4,10 @@ type ValueAttributeName = "value" | "checked" | "selected";
 
 function toValueObject<T>(value: T, propertyName: ValueAttributeName) {
   return propertyName === "selected"
-    ? { selected: value }
+    ? ({ selected: value } as { selected: T })
     : propertyName === "checked"
-    ? { checked: value }
-    : { value };
+    ? ({ checked: value } as { checked: T })
+    : ({ value } as { value: T });
 }
 
 export default function <T, K extends keyof T>(props: T) {
