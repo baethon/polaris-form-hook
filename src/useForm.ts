@@ -1,17 +1,24 @@
 import { useState, useCallback } from "react";
 
-type ValueAttributeName = "value" | "checked" | "selected";
+const validPropertyNames = ["value", "checked", "selected"] as const;
+
+type ValueAttributeName = (typeof validPropertyNames)[number];
 
 type ValueProperty<T> = {
   [K in ValueAttributeName]: T;
 };
 
-function toValueObject<T>(value: T, propertyName: ValueAttributeName) {
-  return propertyName === "selected"
-    ? ({ selected: value } as { selected: T })
-    : propertyName === "checked"
-    ? ({ checked: value } as { checked: T })
-    : ({ value } as { value: T });
+function toValueObject<T, V extends ValueAttributeName>(
+  value: T,
+  propertyName: V
+) {
+  if (!validPropertyNames.includes(propertyName)) {
+    throw new Error(`Unsupported property name: ${propertyName}`);
+  }
+
+  return {
+    [propertyName]: value,
+  } as Pick<ValueProperty<T>, V>;
 }
 
 export default function <T, K extends keyof T>(props: T) {
@@ -31,7 +38,7 @@ export default function <T, K extends keyof T>(props: T) {
     name: P,
     propertyName: V = "value" as V
   ) => ({
-    ...(toValueObject(data[name], propertyName) as ValueProperty<T[P]>[V]),
+    ...toValueObject(data[name], propertyName),
     onChange(value: T[P]) {
       setData({ ...data, [name]: value });
     },
