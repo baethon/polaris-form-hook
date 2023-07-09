@@ -14,7 +14,7 @@ export default function <T, K extends keyof T>(props: T) {
   const [data, setData] = useState(props);
 
   const setField = useCallback(
-    (name: K, value: T[K]) => {
+    <P extends K>(name: P, value: T[P]) => {
       setData((state) => ({
         ...state,
         [name]: value,
@@ -23,9 +23,12 @@ export default function <T, K extends keyof T>(props: T) {
     [data]
   );
 
-  const register = (name: K, propertyName: ValueAttributeName = "value") => ({
+  const register = <P extends K>(
+    name: P,
+    propertyName: ValueAttributeName = "value"
+  ) => ({
     ...toValueObject(data[name], propertyName),
-    onChange(value: T[K]) {
+    onChange(value: T[P]) {
       setData({ ...data, [name]: value });
     },
   });
