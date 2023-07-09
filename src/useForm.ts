@@ -1,5 +1,15 @@
 import { useState, useCallback } from "react";
 
+type ValueAttributeName = "value" | "checked" | "selected";
+
+function toValueObject<T>(value: T, propertyName: ValueAttributeName) {
+  return propertyName === "selected"
+    ? { selected: value }
+    : propertyName === "checked"
+    ? { checked: value }
+    : { value };
+}
+
 export default function <T, K extends keyof T>(props: T) {
   const [data, setData] = useState(props);
 
@@ -13,8 +23,8 @@ export default function <T, K extends keyof T>(props: T) {
     [data]
   );
 
-  const register = (name: K) => ({
-    value: data[name],
+  const register = (name: K, propertyName: ValueAttributeName = "value") => ({
+    ...toValueObject(data[name], propertyName),
     onChange(value: T[K]) {
       setData({ ...data, [name]: value });
     },

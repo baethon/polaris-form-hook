@@ -1,4 +1,4 @@
-import { expect, it } from "@jest/globals";
+import { expect, it, describe } from "@jest/globals";
 import { renderHook, act } from "@testing-library/react";
 import useForm from "../src/useForm";
 
@@ -51,26 +51,35 @@ it("updates form fields", () => {
   });
 });
 
-it("creates Polaris properties", () => {
-  const initialData = {
-    firstName: "Jon",
-    lastName: "Snow",
-  };
+describe("register() method", () => {
+  [
+    [undefined, "value"],
+    ["value", "value"],
+    ["checked", "checked"],
+    ["selected", "selected"],
+  ].forEach(([propertyName, expectedPropertyName]) => {
+    it(`registers Polaris properties [propName:${propertyName}]`, () => {
+      const initialData = {
+        firstName: "Jon",
+        lastName: "Snow",
+      };
 
-  const { result } = renderHook(() => {
-    const form = useForm(initialData);
-    const props = form.register("lastName");
+      const { result } = renderHook(() => {
+        const form = useForm(initialData);
+        const props = form.register("lastName", propertyName as any);
 
-    return { form, props };
-  });
+        return { form, props };
+      });
 
-  act(() => {
-    result.current.props.onChange("Stark");
-  });
+      act(() => {
+        result.current.props.onChange("Stark");
+      });
 
-  expect(result.current.props.value).toEqual("Stark");
-  expect(result.current.form.data).toEqual({
-    firstName: "Jon",
-    lastName: "Stark",
+      expect(result.current.props[expectedPropertyName]).toEqual("Stark");
+      expect(result.current.form.data).toEqual({
+        firstName: "Jon",
+        lastName: "Stark",
+      });
+    });
   });
 });
