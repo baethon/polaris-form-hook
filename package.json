@@ -1,6 +1,6 @@
 {
   "name": "@baethon/polaris-form-hook",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Simple form hook for @shopify/polaris",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
