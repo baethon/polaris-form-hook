@@ -1,26 +1,5 @@
 import { useState, useCallback } from "react";
 
-const validPropertyNames = ["value", "checked", "selected"] as const;
-
-type ValueAttributeName = (typeof validPropertyNames)[number];
-
-type ValueProperty<T> = {
-  [K in ValueAttributeName]: T;
-};
-
-function toValueObject<T, V extends ValueAttributeName>(
-  value: T,
-  propertyName: V
-) {
-  if (!validPropertyNames.includes(propertyName)) {
-    throw new Error(`Unsupported property name: ${propertyName}`);
-  }
-
-  return {
-    [propertyName]: value,
-  } as Pick<ValueProperty<T>, V>;
-}
-
 export default function <T, K extends keyof T>(props: T) {
   const [data, setData] = useState(props);
 
@@ -34,15 +13,26 @@ export default function <T, K extends keyof T>(props: T) {
     [data]
   );
 
-  const register = <P extends K, V extends ValueAttributeName>(
-    name: P,
-    propertyName: V = "value" as V
-  ) => ({
-    ...toValueObject(data[name], propertyName),
+  const onChangeFactory = <P extends K>(name: P) => ({
     onChange(value: T[P]) {
       setData({ ...data, [name]: value });
     },
   });
+
+  const register = {
+    value: <P extends K>(name: P) => ({
+      value: data[name],
+      ...onChangeFactory(name),
+    }),
+    selected: <P extends K>(name: P) => ({
+      selected: data[name],
+      ...onChangeFactory(name),
+    }),
+    checked: <P extends K>(name: P) => ({
+      checked: data[name],
+      ...onChangeFactory(name),
+    }),
+  };
 
   const update = useCallback(
     (values: Partial<T>) =>
@@ -56,7 +46,7 @@ export default function <T, K extends keyof T>(props: T) {
   return {
     data,
     setField,
-    register,
     update,
+    register,
   };
 }

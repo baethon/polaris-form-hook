@@ -52,12 +52,7 @@ it("updates form fields", () => {
 });
 
 describe("register() method", () => {
-  [
-    [undefined, "value"],
-    ["value", "value"],
-    ["checked", "checked"],
-    ["selected", "selected"],
-  ].forEach(([propertyName, expectedPropertyName]) => {
+  ["value", "checked", "selected"].forEach((propertyName) => {
     it(`registers Polaris properties [propName:${propertyName}]`, () => {
       const initialData = {
         firstName: "Jon",
@@ -66,7 +61,7 @@ describe("register() method", () => {
 
       const { result } = renderHook(() => {
         const form = useForm(initialData);
-        const props = form.register("lastName", propertyName as any);
+        const props = form.register[propertyName]("lastName");
 
         return { form, props };
       });
@@ -75,7 +70,7 @@ describe("register() method", () => {
         result.current.props.onChange("Stark");
       });
 
-      expect(result.current.props[expectedPropertyName]).toEqual("Stark");
+      expect(result.current.props[propertyName]).toEqual("Stark");
       expect(result.current.form.data).toEqual({
         firstName: "Jon",
         lastName: "Stark",
