@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 
-export default function <T, K extends keyof T>(props: T) {
-  const [data, setData] = useState(props);
+export default function <T, K extends keyof T>(initialData: T) {
+  const [data, setData] = useState(initialData);
 
   const setField = useCallback(
     <P extends K>(name: P, value: T[P]) => {
@@ -48,5 +48,8 @@ export default function <T, K extends keyof T>(props: T) {
     setField,
     update,
     register,
+    reset: useCallback(() => {
+      setData(initialData);
+    }, []),
   };
 }

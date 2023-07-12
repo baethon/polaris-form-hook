@@ -78,3 +78,24 @@ describe("register() method", () => {
     });
   });
 });
+
+it("resets the data", () => {
+  const initialData = {
+    firstName: "Jon",
+    lastName: "Snow",
+    email: "jon@northmail.com",
+  };
+
+  const { result } = renderHook(() => useForm(initialData));
+
+  act(() => {
+    result.current.update({
+      email: "jon@stark.com",
+      lastName: "Stark",
+    });
+
+    result.current.reset();
+  });
+
+  expect(result.current.data).toEqual(initialData);
+});
