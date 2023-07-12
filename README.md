@@ -4,6 +4,8 @@ React hook for form state management in [@shopify/polaris](https://github.com/Sh
 
 ## Example
 
+Based on the [original example](https://codesandbox.io/s/fjq5vy?module=App.tsx) from Polaris docs.
+
 ```js
 import {Form, FormLayout, Checkbox, TextField, Button} from '@shopify/polaris';
 import {useState, useCallback} from 'react';
