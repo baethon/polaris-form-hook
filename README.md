@@ -2,13 +2,13 @@
 
 React hook for form state management in [@shopify/polaris](https://github.com/Shopify/polaris). It eliminates the necessity for individual `useState` and `useCallback` for each form field and simplifies form data management.
 
-## Example
+## Example ([codesandbox](https://codesandbox.io/s/nervous-paper-5gwtq5?file=/App.tsx))
 
 Based on the [original example](https://codesandbox.io/s/fjq5vy?module=App.tsx) from Polaris docs.
 
 ```js
 import {Form, FormLayout, Checkbox, TextField, Button} from '@shopify/polaris';
-import {useState, useCallback} from 'react';
+import {useCallback} from 'react';
 import {useForm} from '@baethon/polaris-form-hook';
 
 function FormOnSubmitExample() {
