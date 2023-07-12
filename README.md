@@ -48,3 +48,112 @@ function FormOnSubmitExample() {
   );
 }
 ```
+
+## Installation
+
+```bash
+npm i @baethon/polaris-form-hook
+```
+
+## Usage
+
+### Initializing the form
+
+Import `useForm` from `@baethon/polaris-form-hook`:
+
+```js
+import {useForm} from '@baethon/polaris-form-hook';
+```
+
+The function takes one argument - object with initial form data:
+
+```js
+const form = useForm({
+    first_name: '',
+    last_name: '',
+});
+```
+
+By default, it's required to set all fields that should be included in the form.  
+It's possible to define only some of the fields by passing the expected type:
+
+```ts
+const form = useForm<Partial<User>, keyof User>({
+    first_name: '',
+});
+```
+
+This however is discouraged because later compiler might return errors when binding the form with Polaris components.
+
+### Binding with Polaris
+
+The `form` object (created by `useForm()`) contains a `register` property.  
+It's an object containing factory methods that should be used to bind a field with Polaris component.
+
+Polaris is inconsistent in names of the value properties. Depending on the component, it will use `value`, `selected`, or `checked` properties to pass the values. The `register` object will have a method for each of them. 
+
+The factory method will generate two properties: `value` (or `selected`, `checked`) and `onChange()`.
+
+```js
+const form = useForm({
+    first_name: '',
+    accept_terms: false,
+    company_name: [],
+});
+
+(
+  <TextField label="First name" {...form.register.value('first_name')} />
+  <Checkbox label="Accept Terms" {...form.register.checked('accept_terms')} />
+  <ChoiceList
+      title="Company name"
+      choices={[
+        {label: 'Hidden', value: 'hidden'},
+        {label: 'Optional', value: 'optional'},
+        {label: 'Required', value: 'required'},
+      ]}
+      {...form.register.selected('company_name')
+    />
+)
+```
+
+### Accessing form data
+
+To access the form data, use `form.data`.
+
+```js
+const form = useForm({
+    first_name: '',
+    accept_terms: false,
+    company_name: [],
+});
+
+console.log(form.data.first_name);
+```
+
+### Updating fields
+
+You can update a single field using:
+
+```js
+form.setField('first_name', 'Jon');
+```
+
+Or by passing an object that will be merged with the form data:
+
+```js
+form.update({ last_name: 'Snow' });
+```
+
+To reset the form use:
+
+```js
+form.reset();
+```
+
+`reset()` will use the initial form data.
+
+## Testing
+
+```bash
+npm test
+```
