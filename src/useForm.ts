@@ -1,10 +1,13 @@
 import { useState, useCallback } from "react";
+import { Form } from "./interfaces";
 
 export default function <T, K extends keyof T>(initialData: T) {
+  type LocalForm = Form<T, K>;
+
   const [data, setData] = useState(initialData);
 
-  const setField = useCallback(
-    <P extends K>(name: P, value: T[P]) => {
+  const setField: LocalForm["setField"] = useCallback(
+    (name, value) => {
       setData((state) => ({
         ...state,
         [name]: value,
@@ -19,23 +22,23 @@ export default function <T, K extends keyof T>(initialData: T) {
     },
   });
 
-  const register = {
-    value: <P extends K>(name: P) => ({
+  const register: LocalForm["register"] = {
+    value: (name) => ({
       value: data[name],
       ...onChangeFactory(name),
     }),
-    selected: <P extends K>(name: P) => ({
+    selected: (name) => ({
       selected: data[name],
       ...onChangeFactory(name),
     }),
-    checked: <P extends K>(name: P) => ({
+    checked: (name) => ({
       checked: data[name],
       ...onChangeFactory(name),
     }),
   };
 
-  const update = useCallback(
-    (values: Partial<T>) =>
+  const update: LocalForm["update"] = useCallback(
+    (values) =>
       setData((state) => ({
         ...state,
         ...values,
@@ -51,5 +54,5 @@ export default function <T, K extends keyof T>(initialData: T) {
     reset: useCallback(() => {
       setData(initialData);
     }, []),
-  };
+  } as LocalForm;
 }
