@@ -28,3 +28,6 @@ export type Form<T> = {
 
   reset(): void;
 };
+
+// Extracts the payload type of the given form
+export type FormData<T> = T extends Form<infer U> ? U : never;
