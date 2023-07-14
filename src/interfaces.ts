@@ -1,26 +1,26 @@
-export type Form<T, K extends keyof T> = {
+export type Form<T> = {
   data: T;
 
-  setField<P extends K>(name: P, value: T[P]): void;
+  setField<K extends keyof T>(name: K, value: T[K]): void;
 
   register: {
-    value<P extends K>(
-      name: P
+    value<K extends keyof T>(
+      name: K
     ): {
-      value: T[P];
-      onChange(value: T[P]): void;
+      value: T[K];
+      onChange(value: T[K]): void;
     };
-    selected<P extends K>(
-      name: P
+    selected<K extends keyof T>(
+      name: K
     ): {
-      selected: T[P];
-      onChange(value: T[P]): void;
+      selected: T[K];
+      onChange(value: T[K]): void;
     };
-    checked<P extends K>(
-      name: P
+    checked<K extends keyof T>(
+      name: K
     ): {
-      checked: T[P];
-      onChange(value: T[P]): void;
+      checked: T[K];
+      onChange(value: T[K]): void;
     };
   };
 

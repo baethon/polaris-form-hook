@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
 import { Form } from "./interfaces";
 
-export default function <T, K extends keyof T>(initialData: T) {
-  type LocalForm = Form<T, K>;
+export default function <T>(initialData: T) {
+  type LocalForm = Form<T>;
 
   const [data, setData] = useState(initialData);
 
@@ -16,7 +16,7 @@ export default function <T, K extends keyof T>(initialData: T) {
     [data]
   );
 
-  const onChangeFactory = <P extends K>(name: P) => ({
+  const onChangeFactory = <P extends keyof T>(name: P) => ({
     onChange(value: T[P]) {
       setData({ ...data, [name]: value });
     },

@@ -74,16 +74,7 @@ const form = useForm({
 });
 ```
 
-By default, it's required to set all fields that should be included in the form.  
-It's possible to define only some of the fields by passing the expected type:
-
-```ts
-const form = useForm<Partial<User>, keyof User>({
-    first_name: '',
-});
-```
-
-This however is discouraged because later compiler might return errors when binding the form with Polaris components.
+You have to pass all fields that will be used in the form.
 
 ### Binding with Polaris
 
